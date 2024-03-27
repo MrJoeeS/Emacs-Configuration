@@ -2,7 +2,8 @@
 ;; 01 Emacs package management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'package)
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
 (custom-set-variables
@@ -14,7 +15,8 @@
  '(custom-safe-themes
    '("db86c52e18460fe10e750759b9077333f9414ed456dc94473f9cf188b197bc74" default))
  '(inhibit-startup-screen t)
- '(package-selected-packages '(eglot material-theme)))
+ '(package-selected-packages
+   '(prettier-js lsp-mode yasnippet lsp-treemacs helm-lsp projectile hydra flycheck company avy which-key helm-xref dap-mode zenburn-theme json-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -33,6 +35,7 @@
 (when (cl-find-if-not #'package-installed-p package-selected-packages)
   (package-refresh-contents)
   (mapc #'package-install package-selected-packages))
+
 (helm-mode)
 (require 'helm-xref)
 (define-key global-map [remap find-file] #'helm-find-files)
@@ -72,3 +75,13 @@
 
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+
+
+(unless (package-installed-p 'prettier-js)
+  (package-install 'prettier-js))
+
+
+(require 'prettier-js)
+(add-hook 'js2-mode-hook 'prettier-js-mode)
+(add-hook 'web-mode-hook 'prettier-js-mode)
+(add-hook 'js-ts-mode-hook 'prettier-js-mode)
