@@ -14,15 +14,13 @@
  '(custom-safe-themes
    '("db86c52e18460fe10e750759b9077333f9414ed456dc94473f9cf188b197bc74" default))
  '(inhibit-startup-screen t)
- '(package-selected-packages '(material-theme)))
+ '(package-selected-packages '(eglot material-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-'(default ((t (:family "Ubuntu Condensed" :foundry "DAMA" :slant normal :weight regular :height 158 :width normal))))
-
- )
+ '(default ((t (:family "Ubuntu Condensed" :foundry "DAMA" :slant normal :weight regular :height 158 :width normal)))))
 
 (use-package treesit-auto
   :custom
@@ -35,7 +33,6 @@
 (when (cl-find-if-not #'package-installed-p package-selected-packages)
   (package-refresh-contents)
   (mapc #'package-install package-selected-packages))
-(load-theme 'zenburn t)
 (helm-mode)
 (require 'helm-xref)
 (define-key global-map [remap find-file] #'helm-find-files)
@@ -60,6 +57,18 @@
 ;;npm install -g typescript-language-server typescript
 ;;https://emacs-lsp.github.io/lsp-mode/tutorials/reactjs-tutorial/
 
-(add-hook 'python-mode-hook 'eglot-ensure)
+
+(add-hook 'python-ts-mode-hook 'eglot-ensure)
+(setq python-indent-level 4)
+
+(use-package lsp-pyright
+  :ensure t
+  :hook (python-ts-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp))))  ; or lsp-deferred
+
 (add-hook 'js-ts-mode-hook 'eglot-ensure)
 (setq js-indent-level 2)
+
+
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
