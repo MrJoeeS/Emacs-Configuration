@@ -85,3 +85,8 @@
 (add-hook 'js2-mode-hook 'prettier-js-mode)
 (add-hook 'web-mode-hook 'prettier-js-mode)
 (add-hook 'js-ts-mode-hook 'prettier-js-mode)
+
+(use-package python-black
+  :demand t
+  :after python
+  :hook (python-ts-mode . python-black-on-save-mode))
